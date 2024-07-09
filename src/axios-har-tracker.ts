@@ -57,6 +57,7 @@ export class AxiosHarTracker {
     this.creatorConfig = creatorConfig;
     this.resetHar();
 
+    /*
     this.axios.interceptors.request.use(
       async (config) => {
         this.newEntry = this.generateNewEntry();
@@ -72,6 +73,7 @@ export class AxiosHarTracker {
         return Promise.reject(error);
       }
     );
+    */
 
     this.axios.interceptors.response.use(
       async (resp) => {
@@ -165,8 +167,10 @@ export class AxiosHarTracker {
   }
 
   private pushNewEntryResponse(response) {
-    this.newEntry.response = this.returnResponseObject(response);
-    this.generatedHar.log.entries.push(this.newEntry);
+    var newEntry = this.generateNewEntry();
+    newEntry.request = this.returnRequestObject(response.config);
+    newEntry.response = this.returnResponseObject(response);
+    this.generatedHar.log.entries.push(newEntry);
     this.pruneLog();
   }
 
