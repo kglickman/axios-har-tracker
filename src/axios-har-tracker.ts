@@ -163,11 +163,12 @@ export class AxiosHarTracker {
       .forEach((cookieString) => cookieString
         .split(";")
         .forEach((chunk: string) => {
-          const parts = chunk.trim().split("=");
-          cookies.push({
-            name: parts[0].trim(),
-            value: parts[1].trim(),
-          });
+						//don't use split since the value can contain the equals sign as well.
+						const delimLoc = chunk.indexOf('=');
+						cookies.push({
+							name: chunk.substring(0, delimLoc).trim(),
+							value: chunk.substring(delimLoc + 1).trim(),
+						});
         }));
 
     const headers = config.headers ? this.getHeaders(config.headers) : [];
